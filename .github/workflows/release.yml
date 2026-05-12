@@ -16,6 +16,9 @@ on:
 permissions:
   contents: write
 
+env:
+  PROJECT_NAME: PolarLobby
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -40,6 +43,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag || github.ref_name }}
-          name: ${{ github.event.inputs.release_name || format('PolarLobby {0}', github.event.inputs.tag || github.ref_name) }}
+          name: ${{ github.event.inputs.release_name || format('{0} {1}', env.PROJECT_NAME, github.event.inputs.tag || github.ref_name) }}
           files: |
             target/*.jar
