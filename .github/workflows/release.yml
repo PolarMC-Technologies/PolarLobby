@@ -46,7 +46,7 @@ jobs:
           shopt -s nullglob
           excluded_patterns=("original-*" "*-sources.jar" "*-javadoc.jar")
 
-          for jar in target/"$PROJECT_NAME"-*.jar; do
+          for jar in target/"${PROJECT_NAME}"-*.jar; do
             filename="$(basename "$jar")"
             skip_file=false
             for pattern in "${excluded_patterns[@]}"; do
@@ -56,7 +56,7 @@ jobs:
               fi
             done
 
-            if [[ "$skip_file" == true ]]; then
+            if $skip_file; then
               continue
             fi
             cp "$jar" release-artifacts/
