@@ -28,7 +28,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -46,7 +46,7 @@ jobs:
           shopt -s nullglob
           excluded_patterns=("original-*" "*-sources.jar" "*-javadoc.jar")
 
-          for jar in target/${PROJECT_NAME}-*.jar; do
+          for jar in target/*.jar; do
             filename="$(basename "$jar")"
             skip_file=false
             for pattern in "${excluded_patterns[@]}"; do
