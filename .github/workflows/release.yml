@@ -44,17 +44,27 @@ jobs:
         run: |
           mkdir -p release-artifacts
           shopt -s nullglob
+          excluded_patterns=("original-*" "*-sources.jar" "*-javadoc.jar")
 
           for jar in target/"$PROJECT_NAME"-*.jar; do
             filename="$(basename "$jar")"
-            if [[ "$filename" == original-* || "$filename" == *-sources.jar || "$filename" == *-javadoc.jar ]]; then
+            skip_file=false
+            for pattern in "${excluded_patterns[@]}"; do
+              if [[ "$filename" == $pattern ]]; then
+                skip_file=true
+                break
+              fi
+            done
+
+            if [[ "$skip_file" == true ]]; then
               continue
             fi
             cp "$jar" release-artifacts/
           done
 
           if ! ls release-artifacts/*.jar >/dev/null 2>&1; then
-            echo "No release JAR artifacts were found."
+            echo "No release JAR artifacts were found in target/."
+            echo "Check that the Maven build produced $PROJECT_NAME-*.jar and that artifact filtering did not exclude all files."
             exit 1
           fi
 
