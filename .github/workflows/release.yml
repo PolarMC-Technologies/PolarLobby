@@ -64,7 +64,7 @@ jobs:
 
           if ! ls release-artifacts/*.jar >/dev/null 2>&1; then
             echo "No release JAR artifacts were found in release-artifacts/."
-            echo "Check that the Maven build produced $PROJECT_NAME-*.jar and that artifact filtering did not exclude all files."
+            echo "Check that the Maven build produced ${PROJECT_NAME}-*.jar and that artifact filtering did not exclude all files."
             exit 1
           fi
 
