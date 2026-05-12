@@ -46,7 +46,7 @@ jobs:
           shopt -s nullglob
           excluded_patterns=("original-*" "*-sources.jar" "*-javadoc.jar")
 
-          for jar in target/"${PROJECT_NAME}"-*.jar; do
+          for jar in target/"${PROJECT_NAME}-"*.jar; do
             filename="$(basename "$jar")"
             skip_file=false
             for pattern in "${excluded_patterns[@]}"; do
@@ -63,7 +63,7 @@ jobs:
           done
 
           if ! ls release-artifacts/*.jar >/dev/null 2>&1; then
-            echo "No release JAR artifacts were found in target/."
+            echo "No release JAR artifacts were found in release-artifacts/."
             echo "Check that the Maven build produced $PROJECT_NAME-*.jar and that artifact filtering did not exclude all files."
             exit 1
           fi
