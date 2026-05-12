@@ -18,6 +18,7 @@ permissions:
 
 env:
   PROJECT_NAME: PolarLobby
+  RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
 
 jobs:
   build-and-release:
@@ -27,7 +28,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.tag || github.ref }}
+          ref: ${{ env.RELEASE_TAG }}
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -42,7 +43,10 @@ jobs:
       - name: Create or update GitHub release with artifacts
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
-          name: ${{ github.event.inputs.release_name || format('{0} {1}', env.PROJECT_NAME, github.event.inputs.tag || github.ref_name) }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ github.event.inputs.release_name || format('{0} {1}', env.PROJECT_NAME, env.RELEASE_TAG) }}
           files: |
-            target/*.jar
+            target/${{ env.PROJECT_NAME }}-*.jar
+            !target/original-*.jar
+            !target/*-sources.jar
+            !target/*-javadoc.jar
